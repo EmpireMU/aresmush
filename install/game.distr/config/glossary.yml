@@ -1,0 +1,59 @@
+---
+glossary:
+  # Glossary terms automatically highlight on wiki pages
+  # Only the first occurrence of each term is highlighted per page
+  # 
+  # Configuration:
+  #   term: The primary term to highlight (e.g., "The Empire")
+  #   aliases: List of alternative terms that show the same definition
+  #   description: Brief description shown in the popover (keep under 300 chars)
+  #   link_url: Optional URL to full wiki page (e.g., "/wiki/empire")
+  #   link_text: Text for the "Learn more" link (defaults to "Learn more")
+  #   priority: Higher numbers match first (useful for overlapping terms)
+  #   case_sensitive: Set to true for case-sensitive matching
+  #   is_active: Set to false to temporarily disable a term
+  
+  terms:
+    # Example terms - replace these with your game's lore
+    # These examples demonstrate various features of the glossary system
+    
+    - term: "AresMUSH"
+      aliases:
+        - "Ares"
+      description: "A modern game engine for creating text-based Multi-User games with a fully-featured web portal."
+      link_url: "https://aresmush.com"
+      link_text: "Visit AresMUSH.com"
+      priority: 10
+      case_sensitive: false
+      is_active: true
+      
+    - term: "MUSH"
+      aliases:
+        - "Multi-User Shared Hallucination"
+      description: "A text-based online social medium that allows multiple users to interact in a shared virtual environment."
+      link_url: ""
+      link_text: "Learn more"
+      priority: 5
+      case_sensitive: false
+      is_active: true
+      
+    - term: "roleplay"
+      aliases:
+        - "RP"
+        - "roleplaying"
+      description: "The act of taking on a character and acting out their story collaboratively with other players."
+      link_url: ""
+      link_text: ""
+      priority: 0
+      case_sensitive: false
+      is_active: true
+      
+    - term: "scene"
+      aliases:
+        - "scenes"
+      description: "A roleplay session where characters interact. Scenes can be played live or asynchronously."
+      link_url: ""
+      link_text: ""
+      priority: 0
+      case_sensitive: false
+      is_active: true
