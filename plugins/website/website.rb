@@ -12,6 +12,17 @@ module AresMUSH
     def self.shortcuts
       Global.read_config('website', 'shortcuts')
     end
+
+    def self.parse_tags(tags_string)
+      raw = (tags_string || "").strip
+      return [] if raw.blank?
+
+      if raw.include?(',')
+        raw.split(',').map { |t| t.strip }.select { |t| !t.blank? }
+      else
+        raw.split(' ').map { |t| t.strip }.select { |t| !t.blank? }
+      end
+    end
     
     def self.achievements
       Global.read_config('website', 'achievements')

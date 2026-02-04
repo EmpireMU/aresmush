@@ -5,7 +5,7 @@ module AresMUSH
         name_or_id = request.args['id']
         enactor = request.enactor
         text = request.args['text']
-        tags = (request.args['tags'] || "").split(" ")
+        tags = Website.parse_tags(request.args['tags'])
         title = request.args['title']
         name = request.args['name']
         minor_edit = (request.args['minor_edit'] || "").to_bool
