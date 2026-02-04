@@ -19,12 +19,22 @@ module AresMUSH
     def self.sheet_for(char)
       sheet = char.cortex_sheet
       if (!sheet || sheet.empty?)
-        sheet = default_sheet
-        char.update(cortex_sheet: sheet)
+        sheet = initialize_sheet(char)
       else
         sheet = normalize_sheet(sheet)
       end
       sheet
+    end
+
+    def self.initialize_sheet(char)
+      sheet = default_sheet
+      char.update(cortex_sheet: sheet)
+      Global.logger.debug "Initialized Cortex sheet for #{char.name}"
+      sheet
+    end
+
+    def self.reset_sheet_to_defaults(char)
+      initialize_sheet(char)
     end
 
     def self.normalize_sheet(sheet)

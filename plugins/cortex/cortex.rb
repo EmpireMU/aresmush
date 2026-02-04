@@ -6,6 +6,25 @@ module AresMUSH
       File.dirname(__FILE__)
     end
 
+    def self.get_cmd_handler(client, cmd, enactor)
+      case cmd.root
+      when "cortex"
+        case cmd.switch
+        when "init"
+          return CortexInitCmd
+        end
+      end
+      nil
+    end
+
+    def self.get_event_handler(event_name)
+      case event_name
+      when "CharCreatedEvent"
+        return CortexCharCreatedEventHandler
+      end
+      nil
+    end
+
     def self.get_web_request_handler(request)
       case request.cmd
       when "cortexUpdateSheet"
