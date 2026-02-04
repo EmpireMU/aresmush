@@ -4,6 +4,10 @@ module AresMUSH
       def handle(request)
                 
         gallery_group = Global.read_config("website", "character_gallery_group") || "Faction"
+        if is_organisation_group?(gallery_group)
+          return build_org_roster
+        end
+        
         group_config = Demographics.all_groups.select { |k, v| k.downcase == gallery_group.downcase }.values.first
         group_order = (( group_config["values"] || {} ).keys || []).map { |g| g.downcase }
         
@@ -31,6 +35,47 @@ module AresMUSH
           titles: titles,
           organisations: Organisations.all_organisations
         }
+      end
+      
+      def build_org_roster
+        fields = Global.read_config("idle", "roster_fields").select { |f| f['field'] != 'name' }
+        titles = fields.map { |f| f['title'] }
+        roster = []
+        
+        orgs = Organisations.all_organisations
+        orgs.each_with_index do |org, index|
+          members = Organisations.get_members(org)
+          roster_members = members.select { |c| c.on_roster? }
+          if roster_members.any?
+            roster << {
+              key: org.parameterize(),
+              name: org,
+              active_class: index == 0 ? "active" : "",
+              chars: roster_members.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
+            }
+          end
+        end
+        
+        all_chars = Character.all.select { |c| c.on_roster? }
+        no_org_chars = all_chars.reject { |c| c.organisation_names.any? }
+        if no_org_chars.any?
+          roster << {
+            key: "no-organisation",
+            name: "No Organisation",
+            active_class: roster.empty? ? "active" : "",
+            chars: no_org_chars.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
+          }
+        end
+        
+        {
+          roster: roster,
+          titles: titles,
+          organisations: Organisations.all_organisations
+        }
+      end
+      
+      def is_organisation_group?(name)
+        name && [ 'organisation', 'organization' ].include?(name.downcase)
       end
       
       def build_profile(char, field_config)
