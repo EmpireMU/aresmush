@@ -2,7 +2,8 @@ module AresMUSH
   module Organisations
     class OrganisationInfoRequestHandler
       def handle(request)
-        org_name = request.args[:name]
+        args = request.args || {}
+        org_name = args[:name]
         
         org = Organisations.get_organisation(org_name)
         

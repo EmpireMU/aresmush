@@ -3,7 +3,8 @@ module AresMUSH
     class RosterOrganisationsRequestHandler
       def handle(request)
         # Get the organisation filter from request, if any
-        filter_org = request.args[:organisation]
+        args = request.args || {}
+        filter_org = args[:organisation]
         
         fields = Global.read_config("idle", "roster_fields").select { |f| f['field'] != 'name' }
         titles = fields.map { |f| f['title'] }
