@@ -62,6 +62,7 @@ module AresMUSH
         add_to_profile profile_data, Demographics.build_web_profile_data(char, enactor)
         add_to_profile profile_data, Describe.build_web_profile_data(char, enactor)
         add_to_profile profile_data, Ranks.build_web_profile_data(char, enactor)
+        add_to_profile profile_data, Organisations.build_web_profile_data(char, enactor)
         add_to_profile profile_data, Achievements.build_web_profile_data(char, enactor)
         add_to_profile profile_data, Idle.build_web_profile_data(char, enactor)
         add_to_profile profile_data, Chargen.build_web_profile_data(char, enactor)

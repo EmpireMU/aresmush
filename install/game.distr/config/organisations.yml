@@ -1,0 +1,70 @@
+---
+organisations:
+  organisations:
+    House Salfeld:
+      description: Noble house description here.
+      wiki: house-salfeld
+    House Blackwood:
+      description: Noble house description here.
+      wiki: house-blackwood
+    House Riverrun:
+      description: Noble house description here.
+      wiki: house-riverrun
+    House Ashford:
+      description: Noble house description here.
+      wiki: house-ashford
+    House Tyrell:
+      description: Noble house description here.
+      wiki: house-tyrell
+    University of Sanctuary:
+      description: Premier educational institution.
+      wiki: university
+    Merchant's Guild:
+      description: Trade and commerce organisation.
+      wiki: merchants-guild
+    Healer's College:
+      description: Medical training institution.
+      wiki: healers-college
+    Temple of the Seven:
+      description: Religious organisation.
+      wiki: temple
+    City Watch:
+      description: Law enforcement organisation.
+      wiki: city-watch
+    Mage Academy:
+      description: School of magical arts.
+      wiki: mage-academy
+    Thieves' Guild:
+      description: Underground criminal organisation.
+      wiki: thieves-guild
+    Knights of the Realm:
+      description: Elite military order.
+      wiki: knights
+    Bardic College:
+      description: School of music and performance.
+      wiki: bardic-college
+    Explorer's Society:
+      description: Organisation for adventurers and cartographers.
+      wiki: explorers
+    Royal Court:
+      description: The king's inner circle.
+      wiki: royal-court
+    Silver Legion:
+      description: Mercenary company.
+      wiki: silver-legion
+    Artisan's Collective:
+      description: Craftspeople's organisation.
+      wiki: artisans
+    Seafarer's Alliance:
+      description: Naval and maritime organisation.
+      wiki: seafarers
+    Arcane Library:
+      description: Repository of magical knowledge.
+      wiki: arcane-library
+  
+  shortcuts:
+    organisation: org
+    organisations: orgs
+  
+  permissions:
+    manage_organisations: Manage character organisation memberships.

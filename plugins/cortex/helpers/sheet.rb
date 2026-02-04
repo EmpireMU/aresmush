@@ -18,23 +18,27 @@ module AresMUSH
 
     def self.sheet_for(char)
       sheet = char.cortex_sheet
-      if (!sheet || sheet.empty?)
-        sheet = initialize_sheet(char)
+      
+      # Initialize if completely empty or missing prime sets
+      needs_init = false
+      if (sheet.nil? || sheet.empty?)
+        needs_init = true
+      elsif (!sheet["attributes"] || sheet["attributes"].empty?)
+        needs_init = true
+      end
+      
+      if (needs_init)
+        sheet = default_sheet
+        if (sheet["attributes"].nil? || sheet["attributes"].empty?)
+          Global.logger.error "Cortex config not found or invalid - cannot initialize sheet for #{char.name}"
+          return {}
+        end
+        char.update(cortex_sheet: sheet)
       else
         sheet = normalize_sheet(sheet)
       end
+      
       sheet
-    end
-
-    def self.initialize_sheet(char)
-      sheet = default_sheet
-      char.update(cortex_sheet: sheet)
-      Global.logger.debug "Initialized Cortex sheet for #{char.name}"
-      sheet
-    end
-
-    def self.reset_sheet_to_defaults(char)
-      initialize_sheet(char)
     end
 
     def self.normalize_sheet(sheet)

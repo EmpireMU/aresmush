@@ -1,0 +1,9 @@
+<%= header %>
+%xh<%= t('organisations.org_list_title') %>%xn
+
+<% organisation_list.each do |org| %>
+%xh<%= org[:name] %>%xn (<%= org[:member_count] %> members)
+<%= org[:description] %>
+
+<% end %>
+<%= footer %>

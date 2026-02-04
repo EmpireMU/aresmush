@@ -15,5 +15,3 @@ en:
     invalid_trait: "Each trait must have a name and die."
     invalid_die: "Invalid die size %{die}."
     invalid_dice_pool: "Dice pool must include between 1 and 10 dice."
-    all_sheets_initialized: "Initialized Cortex sheets for %{count} characters."
-    sheet_initialized: "Initialized Cortex sheet for %{name}."

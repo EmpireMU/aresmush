@@ -1,0 +1,18 @@
+---
+en:
+  organisations:
+    invalid_org: "That organisation doesn't exist. Use 'orgs' to see the list."
+    already_member: "%{name} is already a member of %{org}."
+    not_member: "%{name} is not a member of %{org}."
+    added: "%{name} has been added to %{org}."
+    removed: "%{name} has been removed from %{org}."
+    no_orgs: "No organisations found."
+    no_members: "No members found."
+    not_in_any: "%{name} is not a member of any organisations."
+    org_list_title: "Organisations"
+    members_title: "Members of %{org}"
+    char_orgs_title: "Organisations for %{name}"
+    org_info_title: "%{org}"
+    description: "Description"
+    wiki: "Wiki"
+    members: "Members"
