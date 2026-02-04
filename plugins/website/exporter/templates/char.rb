@@ -28,7 +28,7 @@ module AresMUSH
       end
       
       def profile
-         Profile.build_profile_sections_web_data(@char)
+         Profile.build_profile_sections_web_data(@char, nil)
        end
        
        def relationships

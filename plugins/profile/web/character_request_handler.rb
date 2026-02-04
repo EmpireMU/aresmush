@@ -12,7 +12,7 @@ module AresMUSH
         error = Website.check_login(request, true)
         return error if error
         
-        profile = Profile.build_profile_sections_web_data(char)
+        profile = Profile.build_profile_sections_web_data(char, enactor)
         
         gallery_files = Profile.character_gallery_files(char)
         

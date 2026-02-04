@@ -117,8 +117,15 @@ module AresMUSH
       end
     end
     
-    def self.build_profile_sections_web_data(char)
-      char.profile
+    def self.build_profile_sections_web_data(char, viewer = nil)
+      profile = char.profile
+      if !Profile.can_manage_char_profile?(viewer, char) && viewer != char
+        profile = profile.reject do |section, _|
+          section.downcase == 'secrets' || section.downcase == 'special effects'
+        end
+      end
+
+      profile
         .sort_by { |k, v| [ char.profile_order.index { |p| p.downcase == k.downcase } || 999, k ] }
         .each_with_index
         .map { |(section, data), index| 

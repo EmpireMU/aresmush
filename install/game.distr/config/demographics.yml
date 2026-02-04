@@ -20,6 +20,7 @@ demographics:
   - full name
   - callsign
   - gender
+  - realm
   - hair
   - eyes
   - skin
@@ -32,6 +33,7 @@ demographics:
   - full name
   - callsign
   - gender
+  - realm
   - hair
   - physique
   genders:
