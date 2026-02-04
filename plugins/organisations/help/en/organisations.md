@@ -15,6 +15,7 @@ Organisations represent the various groups, houses, guilds, and institutions tha
 `orgs` - Lists all available organisations.
 `org <name>` - Shows information about a specific organisation.
 `org/members <name>` - Lists all members of an organisation.
+`org/chars` - Lists all active characters grouped by organisation.
 `orgs <character>` - Shows which organisations a character belongs to.
 
 ## Managing Memberships

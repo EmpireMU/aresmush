@@ -1,0 +1,9 @@
+<%= header %>
+%xh<%= t('organisations.active_chars_title') %>%xn
+
+<% org_list.each do |org| %>
+%xh<%= org[:name] %>%xn (<%= org[:members].count %>)
+<%= org[:members].map { |m| m.name }.join(", ") %>
+
+<% end %>
+<%= footer %>

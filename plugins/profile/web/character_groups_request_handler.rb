@@ -8,6 +8,12 @@ module AresMUSH
         return error if error
         
         group_key = (Global.read_config("website", "character_gallery_group") || "faction").downcase
+        
+        # Check if grouping by organisations
+        if group_key == "organisation" || group_key == "organization"
+          return handle_organisation_grouping(enactor)
+        end
+        
         npc_groups = Character.all.select { |c| c.is_npc? && !c.idled_out? }
            .group_by { |c| get_group_value(c, group_key) }
         char_groups = Chargen.approved_chars.group_by { |c| get_group_value(c, group_key) }
@@ -105,6 +111,94 @@ module AresMUSH
       def get_group_value(char, group_key)
         group = char.group(group_key)
         group.blank? ? "No #{group_key.titlecase}" : group
+      end
+      
+      def handle_organisation_grouping(enactor)
+        # Group characters by their organisations
+        orgs = Organisations.all_organisations
+        groups = []
+        
+        orgs.each_with_index do |org_name, index|
+          # Get characters in this org
+          chars = Chargen.approved_chars.select { |c| c.in_organisation?(org_name) }
+          npcs = Character.all.select { |c| c.is_npc? && !c.idled_out? && c.in_organisation?(org_name) }
+          
+          # Skip empty organisations
+          next if chars.empty? && npcs.empty?
+          
+          groups << {
+            name: org_name,
+            key: org_name.parameterize,
+            subgroups: [{
+              name: "",
+              chars: chars.sort_by { |c| c.name }.map { |c| {
+                name: c.name,
+                icon: Website.icon_for_char(c)
+              }}
+            }],
+            has_npcs: npcs.any?,
+            npcs: npcs.sort_by { |c| c.name }.map { |c| {
+              name: c.name,
+              icon: Website.icon_for_char(c)
+            }},
+            active_class: index == 0 ? 'active' : ''
+          }
+        end
+        
+        # Add characters not in any organisation
+        no_org_chars = Chargen.approved_chars.reject { |c| c.organisation_names.any? }
+        no_org_npcs = Character.all.select { |c| c.is_npc? && !c.idled_out? }.reject { |c| c.organisation_names.any? }
+        
+        if no_org_chars.any? || no_org_npcs.any?
+          groups << {
+            name: "No Organisation",
+            key: "no-organisation",
+            subgroups: [{
+              name: "",
+              chars: no_org_chars.sort_by { |c| c.name }.map { |c| {
+                name: c.name,
+                icon: Website.icon_for_char(c)
+              }}
+            }],
+            has_npcs: no_org_npcs.any?,
+            npcs: no_org_npcs.sort_by { |c| c.name }.map { |c| {
+              name: c.name,
+              icon: Website.icon_for_char(c)
+            }},
+            active_class: groups.empty? ? 'active' : ''
+          }
+        end
+        
+        idle_chars = Character.all.select { |c| c.idle_state == 'Gone' }.sort_by { |c| c.name }.map { |c| {
+          name: c.name,
+          icon: Website.icon_for_char(c)
+        }}
+
+        dead_chars = Character.all.select { |c| c.idle_state == 'Dead' }.sort_by { |c| c.name }.map { |c| {
+          name: c.name,
+          icon: Website.icon_for_char(c)
+        }}
+        
+        if (enactor && enactor.is_admin?)
+          new_chars = Character.all.select { |c| !c.is_approved? }.sort_by { |c| c.name }.map { |c| {
+            name: c.name,
+            icon: Website.icon_for_char(c)
+          }}
+        else
+          new_chars = nil
+        end
+        
+        {
+          group_names: groups.map { |g| {
+            name: g[:name],
+            key: g[:key],
+            active_class: g[:active_class]
+          }},
+          groups: groups,
+          idle: idle_chars,
+          dead: dead_chars,
+          unapproved: new_chars
+        }
       end
     end
   end

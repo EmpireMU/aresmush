@@ -20,6 +20,8 @@ module AresMUSH
           return OrgRemoveCmd
         when "members"
           return OrgMembersCmd
+        when "chars"
+          return CharsByOrgCmd
         when nil
           if (cmd.args)
             return OrgInfoCmd
@@ -48,6 +50,8 @@ module AresMUSH
         return OrganisationMembersRequestHandler
       when "rosterByOrganisation"
         return RosterOrganisationsRequestHandler
+      when "charactersByOrganisation"
+        return CharactersByOrgRequestHandler
       end
       nil
     end

@@ -28,7 +28,8 @@ module AresMUSH
         
         {
           roster: roster,
-          titles: titles
+          titles: titles,
+          organisations: Organisations.all_organisations
         }
       end
       
