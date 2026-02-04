@@ -29,9 +29,13 @@ module AresMUSH
         
         begin
           gallery_group = Global.read_config('website', 'character_gallery_group')
-          group = Demographics.get_group(gallery_group)
-          if (!group)
-            @validator.add_error "website:character_gallery_group #{gallery_group} is not a valid group."
+          if (gallery_group.blank?)
+            @validator.add_error "website:character_gallery_group must be set."
+          elsif (!is_organisation_group?(gallery_group))
+            group = Demographics.get_group(gallery_group)
+            if (!group)
+              @validator.add_error "website:character_gallery_group #{gallery_group} is not a valid group."
+            end
           end
           
           gallery_subgroup = Global.read_config('website', 'character_gallery_subgroup')
@@ -46,6 +50,10 @@ module AresMUSH
         end
         
         @validator.errors
+      end
+      
+      def is_organisation_group?(name)
+        name && [ 'organisation', 'organization' ].include?(name.downcase)
       end
 
     end
