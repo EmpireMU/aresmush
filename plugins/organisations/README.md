@@ -62,6 +62,12 @@ The plugin provides several API endpoints:
 - `organisationMembers` - Returns member list for an organisation
 - `rosterByOrganisation` - Returns roster grouped by organisation (for filtering)
 
+### Web Portal Pages
+
+- `/organisations` - Browse all organisations with descriptions and member counts
+- `/roster` - View by Organisation button to see roster grouped by org
+- `/char/<name>` - Character profiles show organisation memberships in a dedicated tab
+
 ## Roster Integration
 
 The roster can now be filtered by organisation. Characters appear under each organisation they belong to. The web portal can call the `rosterByOrganisation` endpoint with an optional `organisation` parameter to filter the roster.
