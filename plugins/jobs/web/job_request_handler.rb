@@ -44,6 +44,8 @@ module AresMUSH
           is_open: job.is_open?,
           is_job_admin: is_job_admin,
           fs3_enabled: FS3Skills.is_enabled?,
+          cortex_enabled: Cortex.is_enabled?,
+          cortex: (Cortex.is_enabled? && enactor) ? Cortex.build_web_char_data(enactor, enactor) : nil,
           is_category_admin: Jobs.can_access_category?(enactor, job.job_category),
           is_approval_job: job.author && !job.author.is_approved? && (job.author.approval_job == job),
           is_roster_job: roster_char && job.is_open?,

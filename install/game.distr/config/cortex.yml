@@ -1,0 +1,65 @@
+---
+cortex:
+  public_sheets: true
+  attributes:
+  - name: Mind
+    die: d6
+  - name: Spirit
+    die: d6
+  - name: Social
+    die: d6
+  - name: Leadership
+    die: d6
+  - name: Prowess
+    die: d6
+  - name: Finesse
+    die: d6
+  skills:
+  - name: Administration
+    die: d4
+  - name: Arcana
+    die: d4
+  - name: Athletics
+    die: d4
+  - name: Composure
+    die: d4
+  - name: Dexterity
+    die: d4
+  - name: Espionage
+    die: d4
+  - name: Exploration
+    die: d4
+  - name: Fighting
+    die: d4
+  - name: Influence
+    die: d4
+  - name: Learning
+    die: d4
+  - name: Making
+    die: d4
+  - name: Medicine
+    die: d4
+  - name: Perception
+    die: d4
+  - name: Performance
+    die: d4
+  - name: Politics
+    die: d4
+  - name: Rhetoric
+    die: d4
+  - name: Seafaring
+    die: d4
+  - name: Survival
+    die: d4
+  - name: Warfare
+    die: d4
+  distinctions:
+  - name: Character Concept
+    die: d8
+    desc: Core character concept (e.g. Bold Adventurer)
+  - name: Culture
+    die: d8
+    desc: Character's cultural origin
+  - name: Vocation
+    die: d8
+    desc: Character's profession or calling

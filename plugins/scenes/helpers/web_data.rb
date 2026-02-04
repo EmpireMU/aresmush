@@ -83,6 +83,7 @@ module AresMUSH
         poses: poses,
         fs3_enabled: FS3Skills.is_enabled?,
         fs3combat_enabled: FS3Combat.is_enabled?,
+        cortex: (Cortex.is_enabled? && viewer) ? Cortex.build_web_char_data(viewer, viewer) : nil,
         poseable_chars: Scenes.build_poseable_chars_data(scene, viewer),
         pose_order_type: scene.room ? scene.room.pose_order_type : nil,
         use_custom_char_cards: Scenes.use_custom_char_cards?,

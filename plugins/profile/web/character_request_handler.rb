@@ -87,6 +87,10 @@ module AresMUSH
         if Manage.is_extra_installed?("cookies")
           profile_data['cookies'] = Cookies.get_web_sheet(char, enactor)
         end
+
+        if Manage.is_extra_installed?("cortex")
+          profile_data['cortex'] = Cortex.build_web_char_data(char, enactor)
+        end
         
         profile_data
       end
