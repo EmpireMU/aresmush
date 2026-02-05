@@ -175,7 +175,7 @@ module AresMUSH
 end
 
 param = ENV['ares_rake_param']
-default_path = File.expand_path(File.join(AresMUSH.game_path, '..', 'ares_export', 'rooms.json'))
+default_path = File.expand_path(File.join(AresMUSH.game_path, '..', '..', 'ares_export', 'rooms.json'))
 
 path = default_path
 overwrite = false
