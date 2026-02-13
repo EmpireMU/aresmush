@@ -37,7 +37,7 @@ module AresMUSH
           end
           text = page.text
         else
-          text = Website.format_markdown_for_html page.text
+          text = Website.format_markdown_for_html(page.text, skip_glossary: (page.name == 'home'))
         end
         
         can_edit = enactor && enactor.is_approved? && !lock_info && ( can_manage_wiki || !restricted_page )

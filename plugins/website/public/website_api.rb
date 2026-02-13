@@ -1,21 +1,21 @@
 module AresMUSH
   module Website
-    def self.format_markdown_for_html(output)
+    def self.format_markdown_for_html(output, options = {})
       return nil if !output
-        
+
       text = format_output_for_html(output)
       allow_html = Global.read_config('website', 'allow_html_in_markdown')
       html_formatter = AresMUSH::Website::WikiMarkdownFormatter.new(!allow_html, self)
       text = html_formatter.to_html text
-      
-      # Apply glossary term highlighting
-      begin
-        text = Website::GlossaryHelper.apply_glossary(text)
-      rescue Exception => e
-        Global.logger.error "Error applying glossary: #{e.message}\n#{e.backtrace[0,5].join("\n")}"
-        # Continue without glossary highlighting on error
+
+      unless options[:skip_glossary]
+        begin
+          text = Website::GlossaryHelper.apply_glossary(text)
+        rescue Exception => e
+          Global.logger.error "Error applying glossary: #{e.message}\n#{e.backtrace[0,5].join("\n")}"
+        end
       end
-      
+
       text
     end
       
