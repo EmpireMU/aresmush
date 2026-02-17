@@ -14,6 +14,11 @@ module AresMUSH
       def required_args
         [ self.field, self.value ]
       end
+
+      def check_can_edit_section
+        return nil if Profile.can_edit_profile_section?(enactor, self.field)
+        return t('profile.section_restricted', :field => self.field)
+      end
       
       def handle
         profile = enactor.profile

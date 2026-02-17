@@ -54,15 +54,18 @@ module AresMUSH
       }
     end
     
-    def self.save_web_descs(model, data)
-      model.update_desc(Website.format_input_for_mush(data['current']))
+    def self.save_web_descs(model, data, enactor = nil)
+      can_edit_desc = !enactor || !model.kind_of?(Character) || Describe.can_edit_desc?(enactor, model)
+      if can_edit_desc
+        model.update_desc(Website.format_input_for_mush(data['current']))
+      end
       if (model.kind_of?(Character))
         outfits = {}
         (data['outfits'] || []).each do |name, desc|
           outfits[name.titlecase] =  Website.format_input_for_mush(desc)
         end
         model.update(outfits: outfits)
-        model.update(shortdesc: data['short'])
+        model.update(shortdesc: data['short']) if can_edit_desc
       end
       details = {}
       (data['details'] || []).each do |name, desc|
@@ -82,11 +85,21 @@ module AresMUSH
       }      
     end
     
+    def self.can_edit_desc?(actor, model)
+      return true if !model.kind_of?(Character)
+      return true if actor && actor.has_permission?("desc_anything")
+      return true if actor && actor.has_permission?("manage_profiles")
+      return false if Global.read_config("describe", "restrict_desc_edit")
+      actor == model
+    end
+
     def self.build_web_profile_edit_data(char, viewer, is_profile_manager)
+      can_edit_desc = Describe.can_edit_desc?(viewer, char)
       {
         desc: Website.format_input_for_html(char.description),
         shortdesc: char.shortdesc ? char.shortdesc : '',
-        descs: Describe.get_web_descs_for_edit(char)
+        descs: Describe.get_web_descs_for_edit(char),
+        can_edit_desc: can_edit_desc
       }
     end
     

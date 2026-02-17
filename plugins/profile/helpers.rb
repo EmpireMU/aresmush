@@ -33,6 +33,22 @@ module AresMUSH
       
       return AresCentral.is_alt?(actor, char)
     end
+
+    def self.restricted_profile_sections
+      (Global.read_config("profile", "restricted_profile_sections") || []).map { |s| s.to_s.strip }
+    end
+
+    def self.restricted_profile_section?(section_name)
+      return false if section_name.blank?
+      restricted = restricted_profile_sections.map { |s| s.downcase }
+      restricted.include?(section_name.to_s.downcase.strip)
+    end
+
+    def self.can_edit_profile_section?(actor, section_name)
+      return true if !actor
+      return true if Profile.can_manage_profiles?(actor)
+      !Profile.restricted_profile_section?(section_name)
+    end
     
     def self.character_page_folder(char)
       Website::FilenameSanitizer.sanitize(char.name.downcase)

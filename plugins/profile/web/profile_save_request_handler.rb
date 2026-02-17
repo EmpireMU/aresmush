@@ -68,7 +68,7 @@ module AresMUSH
           return { error: error }
         end
         
-        Describe.save_web_descs(char, request.args['descs'])
+        Describe.save_web_descs(char, request.args['descs'], enactor)
 
         if Manage.is_extra_installed?("prefs")
           error = Prefs.save_web_profile_data(char, enactor, request.args)
@@ -96,8 +96,23 @@ module AresMUSH
         
         ## DO PROFILE LAST SO IT TRIGGERS THE SOURCE HISTORY UPDATE
         profile = {}
-        (request.args['profile'] || {}).each do |name, text|
-          profile[name.titleize] = Website.format_input_for_mush(text)
+        request_profile = request.args['profile'] || {}
+        if manager
+          request_profile.each do |name, text|
+            profile[name.titleize] = Website.format_input_for_mush(text)
+          end
+        else
+          profile = char.profile.dup
+          request_profile.each do |name, text|
+            section_name = name.titleize
+            if Profile.can_edit_profile_section?(enactor, section_name)
+              profile[section_name] = Website.format_input_for_mush(text)
+            end
+          end
+          profile.delete_if do |section_name, _|
+            Profile.can_edit_profile_section?(enactor, section_name) &&
+              !request_profile.keys.any? { |k| k.to_s.downcase.strip == section_name.downcase }
+          end
         end
         char.set_profile(profile, enactor)
         

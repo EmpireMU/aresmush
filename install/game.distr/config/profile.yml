@@ -26,3 +26,9 @@ profile:
   permissions:
     manage_profiles: Allows editing other characters' profiles.
   profile_title_format: bitname
+  # Profile sections only staff (manage_profiles) can edit. Case-insensitive.
+  restricted_profile_sections:
+  - Background
+  - Personality
+  - Notable Traits
+  - Special Effects

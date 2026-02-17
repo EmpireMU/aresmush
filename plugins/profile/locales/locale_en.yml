@@ -21,6 +21,7 @@ en:
         
         custom_profile_set: "Custom profile field %{field} set."
         custom_profile_cleared: "Custom profile field %{field} cleared."
+        section_restricted: "You cannot edit the %{field} section. Only staff may modify that."
         
         see_also_info: "Use 'info' for IC info."
         

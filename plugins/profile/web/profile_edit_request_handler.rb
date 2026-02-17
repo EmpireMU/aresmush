@@ -30,7 +30,8 @@ module AresMUSH
           {
             name: section.titlecase,
             text: Website.format_input_for_html(data),
-            key: index
+            key: index,
+            editable: Profile.can_edit_profile_section?(enactor, section)
           }
         }
         

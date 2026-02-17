@@ -27,6 +27,8 @@ describe:
     admin: "%xb"
     beginner: "%xg"
     web: "%xh%xx"
+  # When true, only staff with manage_profiles or desc_anything can edit descriptions.
+  restrict_desc_edit: true
   permissions:
     desc_anything: Edit descs on any object.
     desc_places: Edit descs on rooms and exits

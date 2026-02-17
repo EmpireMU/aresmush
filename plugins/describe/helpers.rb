@@ -1,9 +1,13 @@
 module AresMUSH
   module Describe
     def self.can_describe?(char, model)
-      if (char == model)
+      if (char.has_permission?("desc_anything"))
         return true
-      elsif (char.has_permission?("desc_anything"))
+      elsif (char.has_permission?("manage_profiles") && model.class == Character)
+        return true
+      elsif (char == model && model.class == Character)
+        return !Global.read_config("describe", "restrict_desc_edit")
+      elsif (char == model)
         return true
       elsif (model.class == Room || model.class == Exit)        
         return model.owned_by?(char) || char.has_permission?("desc_places")
