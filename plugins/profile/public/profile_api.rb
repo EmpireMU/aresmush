@@ -36,12 +36,27 @@ module AresMUSH
 
       when 'handle'
         char.handle ? "@#{char.handle.name}" : ""
-        
-      else 
+
+      when 'cortex_concept'
+        Profile.cortex_concept(char)
+
+      else
         nil
       end
     end
     
+    # First distinction name from Cortex sheet (used as "Concept" on roster, etc.)
+    def self.cortex_concept(char)
+      return "" unless char.respond_to?(:cortex_sheet)
+      sheet = char.cortex_sheet
+      return "" if !sheet.is_a?(Hash)
+      distinctions = sheet["distinctions"] || sheet[:distinctions]
+      return "" if !distinctions.is_a?(Array) || distinctions.empty?
+      first = distinctions.first
+      name = first.is_a?(Hash) ? (first["name"] || first[:name]) : first.to_s
+      name.blank? ? "" : name.to_s
+    end
+
     def self.get_player_tag(char)
       player_tag = char.content_tags.select { |t| t.start_with?("player:") }.first
       return nil if !player_tag

@@ -14,20 +14,26 @@ module AresMUSH
         fields = Global.read_config("idle", "roster_fields").select { |f| f['field'] != 'name' }
         titles = fields.map { |f| f['title'] }
         
-        roster = []
+        all_roster = Character.all.select { |c| c.on_roster? }
+        roster = [{
+          key: "all",
+          name: "All",
+          active_class: "active",
+          chars: all_roster.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
+        }]
         
-        groups = Character.all.select { |c| c.on_roster? }
+        groups = all_roster
           .group_by { |c| c.group(gallery_group) || "" }
           .sort_by { |group, chars| [group_order.find_index(group.downcase) || 99, group] }
         
-        groups.each_with_index do |(group, chars), index|
+        groups.each do |group, chars|
           name = group.blank? ? "No #{gallery_group}" : group
           roster << {
             key: name.parameterize(),
             name: name,
-            active_class: index == 0 ? "active" : "",
+            active_class: "",
             chars: chars.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
-          } 
+          }
         end
         
         {
@@ -40,29 +46,34 @@ module AresMUSH
       def build_org_roster
         fields = Global.read_config("idle", "roster_fields").select { |f| f['field'] != 'name' }
         titles = fields.map { |f| f['title'] }
-        roster = []
+        all_chars = Character.all.select { |c| c.on_roster? }
+        roster = [{
+          key: "all",
+          name: "All",
+          active_class: "active",
+          chars: all_chars.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
+        }]
         
         orgs = Organisations.all_organisations
-        orgs.each_with_index do |org, index|
+        orgs.each do |org|
           members = Organisations.get_members(org)
           roster_members = members.select { |c| c.on_roster? }
           if roster_members.any?
             roster << {
               key: org.parameterize(),
               name: org,
-              active_class: index == 0 ? "active" : "",
+              active_class: "",
               chars: roster_members.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
             }
           end
         end
         
-        all_chars = Character.all.select { |c| c.on_roster? }
         no_org_chars = all_chars.reject { |c| c.organisation_names.any? }
         if no_org_chars.any?
           roster << {
             key: "no-organisation",
             name: "No Organisation",
-            active_class: roster.empty? ? "active" : "",
+            active_class: "",
             chars: no_org_chars.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
           }
         end

@@ -42,18 +42,16 @@ idle:
   - field: name
     width: 20
     title: Name
+  - field: cortex_concept
+    width: 22
+    title: Concept
   - field: demographic
     width: 10
     title: Gender
     value: gender
-  - field: group
-    width: 17
-    title: Faction
-    value: Faction
-  - field: group
-    width: 17
-    title: Position
-    value: Position
+  - field: age
+    width: 6
+    title: Age
   shortcuts:
     idle/add: idle/action
     roster/update: roster/add

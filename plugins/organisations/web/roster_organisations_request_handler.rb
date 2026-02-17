@@ -23,31 +23,32 @@ module AresMUSH
             chars: chars.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
           }]
         else
-          # Group by organisations
+          # "All" tab first (default), then group by organisations
+          roster = [{
+            key: "all",
+            name: "All",
+            active_class: "active",
+            chars: all_chars.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
+          }]
           orgs = Organisations.all_organisations
-          
-          roster = []
-          orgs.each_with_index do |org, index|
+          orgs.each do |org|
             members = Organisations.get_members(org)
             roster_members = members.select { |c| c.on_roster? }
-            
             if roster_members.any?
               roster << {
                 key: org.parameterize(),
                 name: org,
-                active_class: index == 0 ? "active" : "",
+                active_class: "",
                 chars: roster_members.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
               }
             end
           end
-          
-          # Add characters not in any organisation
           no_org_chars = all_chars.reject { |c| c.organisation_names.any? }
           if no_org_chars.any?
             roster << {
               key: "no-organisation",
               name: "No Organisation",
-              active_class: roster.empty? ? "active" : "",
+              active_class: "",
               chars: no_org_chars.sort_by { |c| c.name }.map { |c| build_profile(c, fields) }
             }
           end

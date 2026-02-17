@@ -18,7 +18,22 @@ module AresMUSH
            .group_by { |c| get_group_value(c, group_key) }
         char_groups = Chargen.approved_chars.group_by { |c| get_group_value(c, group_key) }
         
-        groups = []
+        # "All" tab first (default): all approved chars + npcs in one list
+        all_approved = Chargen.approved_chars
+        all_npcs = Character.all.select { |c| c.is_npc? && !c.idled_out? }
+        all_chars_flat = (all_approved + all_npcs).sort_by { |c| c.name }.map { |c| {
+          name: c.name,
+          icon: Website.icon_for_char(c)
+        }}
+        all_group = {
+          name: "All",
+          key: "all",
+          subgroups: [{ name: "", chars: all_chars_flat }],
+          has_npcs: all_npcs.any?,
+          npcs: all_npcs.sort_by { |c| c.name }.map { |c| { name: c.name, icon: Website.icon_for_char(c) } },
+          active_class: "active"
+        }
+        groups = [all_group]
         
         char_group_names = char_groups.keys
         npc_group_names = npc_groups.keys
@@ -28,7 +43,7 @@ module AresMUSH
         group_order = (( group["values"] || {} ).keys || []).map { |g| g.downcase }
         group_names = group_names.sort_by { |g| [group_order.find_index(g.downcase) || 99, g] }
                 
-        group_names.each_with_index do |group_name, index|
+        group_names.each do |group_name|
           npcs_in_group = (npc_groups[group_name] || []).sort_by { |n| n.name }.map { |c| {
               name: c.name,
               icon: Website.icon_for_char(c)
@@ -67,7 +82,7 @@ module AresMUSH
             subgroups: subgroups,
             has_npcs: npcs_in_group.any?,
             npcs: npcs_in_group,
-            active_class: index == 0 ? 'active' : ''  # Stupid bootstrap hack
+            active_class: ""
           }
         end
         
@@ -95,11 +110,8 @@ module AresMUSH
 
         
         {
-          group_names: group_names.each_with_index.map { |g, index| {
-            name: g,
-            key: g.parameterize,
-            active_class: index == 0 ? 'active' : ''   # Stupid bootstrap hack
-          }},
+          group_names: [ { name: "All", key: "all", active_class: "active" } ] +
+            group_names.map { |g| { name: g, key: g.parameterize, active_class: "" } },
           groups: groups,
           idle: idle_chars,
           dead: dead_chars,
@@ -114,16 +126,27 @@ module AresMUSH
       end
       
       def handle_organisation_grouping(enactor)
-        # Group characters by their organisations
-        orgs = Organisations.all_organisations
-        groups = []
+        # "All" tab first (default): all approved chars + npcs regardless of organisation
+        all_approved = Chargen.approved_chars
+        all_npcs = Character.all.select { |c| c.is_npc? && !c.idled_out? }
+        all_chars_flat = (all_approved + all_npcs).sort_by { |c| c.name }.map { |c| {
+          name: c.name,
+          icon: Website.icon_for_char(c)
+        }}
+        groups = [{
+          name: "All",
+          key: "all",
+          subgroups: [{ name: "", chars: all_chars_flat }],
+          has_npcs: all_npcs.any?,
+          npcs: all_npcs.sort_by { |c| c.name }.map { |c| { name: c.name, icon: Website.icon_for_char(c) } },
+          active_class: "active"
+        }]
         
-        orgs.each_with_index do |org_name, index|
-          # Get characters in this org
+        # Then group by organisation
+        orgs = Organisations.all_organisations
+        orgs.each do |org_name|
           chars = Chargen.approved_chars.select { |c| c.in_organisation?(org_name) }
           npcs = Character.all.select { |c| c.is_npc? && !c.idled_out? && c.in_organisation?(org_name) }
-          
-          # Skip empty organisations
           next if chars.empty? && npcs.empty?
           
           groups << {
@@ -141,14 +164,13 @@ module AresMUSH
               name: c.name,
               icon: Website.icon_for_char(c)
             }},
-            active_class: index == 0 ? 'active' : ''
+            active_class: ""
           }
         end
         
         # Add characters not in any organisation
         no_org_chars = Chargen.approved_chars.reject { |c| c.organisation_names.any? }
         no_org_npcs = Character.all.select { |c| c.is_npc? && !c.idled_out? }.reject { |c| c.organisation_names.any? }
-        
         if no_org_chars.any? || no_org_npcs.any?
           groups << {
             name: "No Organisation",
@@ -165,7 +187,7 @@ module AresMUSH
               name: c.name,
               icon: Website.icon_for_char(c)
             }},
-            active_class: groups.empty? ? 'active' : ''
+            active_class: ""
           }
         end
         
@@ -189,11 +211,7 @@ module AresMUSH
         end
         
         {
-          group_names: groups.map { |g| {
-            name: g[:name],
-            key: g[:key],
-            active_class: g[:active_class]
-          }},
+          group_names: groups.map { |g| { name: g[:name], key: g[:key], active_class: g[:active_class] } },
           groups: groups,
           idle: idle_chars,
           dead: dead_chars,
